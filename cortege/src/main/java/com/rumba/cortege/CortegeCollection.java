@@ -17,20 +17,18 @@ import java.util.List;
  * Date: 10.04.12
  */
 public interface CortegeCollection<T extends Cortege> extends Collection<T>, Iterable<T> {
-
     <T> boolean contains(int num, T obj);
 
     CortegeCollection<T> extract(int num, Object key);
 
     CortegeCollection<T> extract(Corteges.Predicate<T> predicate);
 
-//    <C> CortegeCollection<T> view(int num, Corteges.Predicate<C> predicate);
-
+    //    <C> CortegeCollection<T> view(int num, Corteges.Predicate<C> predicate);
     T findAny(int num, Object key);
 
     T findAny(Corteges.Predicate<T> predicate);
 
     <Vi> List<Vi> getColumnCopy(int num);
 
-    <Vi> void fill(int num, Vi value);
+    <Vi> void fill(int num, Vi value); // be careful with types. Type is not bounded
 }
