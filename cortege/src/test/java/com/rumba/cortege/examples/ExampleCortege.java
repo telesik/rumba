@@ -6,7 +6,10 @@
  *
  * @Project: Cortege
  */
-package com.rumba.cortege;
+package com.rumba.cortege.examples;
+
+import com.rumba.cortege.Cortege;
+import com.rumba.cortege.CortegeChain;
 
 /**
  * User: kiselyov
@@ -14,7 +17,7 @@ package com.rumba.cortege;
  */
 public class ExampleCortege {
     public static void main(String[] args) {
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeChain.create(2);
         // заполнение элементов значениями
         // 1-й вариант (заполняем первый элемент в кортеже, с контролем типа)
         cortegeLS.setValue(4L);

@@ -21,7 +21,7 @@ public class CortegeHashSetTest extends TestCase {
     @Test
     public void testAddOneInstance() throws Exception {
         CortegeHashSet<Cortege<Long, Cortege<String, Cortege.End>>> cortegeHashSet = Corteges.newCortegeHashSet(2);
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeChain.create(2);
         cortegeHashSet.add(cortegeLS);
         cortegeHashSet.add(cortegeLS);
         cortegeHashSet.add(cortegeLS);
@@ -34,11 +34,11 @@ public class CortegeHashSetTest extends TestCase {
     @Test
     public void testAddEqualObjects() throws Exception {
         CortegeHashSet<Cortege<Long, Cortege<String, Cortege.End>>> cortegeHashSet = Corteges.newCortegeHashSet(2);
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS1 = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS1 = CortegeChain.create(2);
         cortegeHashSet.add(cortegeLS1);
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS2 = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS2 = CortegeChain.create(2);
         cortegeHashSet.add(cortegeLS2);
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS3 = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS3 = CortegeChain.create(2);
         cortegeHashSet.add(cortegeLS3);
         Assert.assertEquals(cortegeHashSet.size(), 1);
         for (Cortege<Long, Cortege<String, Cortege.End>> cortege : cortegeHashSet) {

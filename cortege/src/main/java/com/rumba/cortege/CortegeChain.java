@@ -14,12 +14,12 @@ package com.rumba.cortege;
  *
  * @author alexeyk (voilesik@gmail.com)
  */
-public class CortegeQueue<V, T extends Cortege> implements Cortege<V, T> {
+public class CortegeChain<V, T extends Cortege> implements Cortege<V, T> {
     private V value;
     private Cortege nextValue;
     private int deep;
 
-    private CortegeQueue() {
+    private CortegeChain() {
     }
 
     @Override
@@ -58,14 +58,14 @@ public class CortegeQueue<V, T extends Cortege> implements Cortege<V, T> {
         return (T) nextValue;
     }
 
-    public static <VV, TT extends Cortege> CortegeQueue<VV, TT> create(int deep) throws IllegalArgumentException {
+    public static <VV, TT extends Cortege> CortegeChain<VV, TT> create(int deep) throws IllegalArgumentException {
         if (deep < 1) throw new IllegalArgumentException("deep should be a positive integer");
-        CortegeQueue<VV, TT> cortegeQueue = new CortegeQueue<VV, TT>();
-        cortegeQueue.deep = deep--;
+        CortegeChain<VV, TT> cortegeChain = new CortegeChain<VV, TT>();
+        cortegeChain.deep = deep--;
         if (deep > 0) {
-            cortegeQueue.nextValue = create(deep);
+            cortegeChain.nextValue = create(deep);
         }
-        return cortegeQueue;
+        return cortegeChain;
     }
 
     @Override
@@ -82,9 +82,9 @@ public class CortegeQueue<V, T extends Cortege> implements Cortege<V, T> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CortegeQueue)) return false;
+        if (!(o instanceof CortegeChain)) return false;
 
-        CortegeQueue that = (CortegeQueue) o;
+        CortegeChain that = (CortegeChain) o;
 
         if (deep != that.deep) return false;
         if (nextValue != null ? !nextValue.equals(that.nextValue) : that.nextValue != null) return false;
@@ -102,7 +102,7 @@ public class CortegeQueue<V, T extends Cortege> implements Cortege<V, T> {
 
     @Override
     public String toString() {
-        return "CortegeQueue{" +
+        return "CortegeChain{" +
                 "value=" + value + "(" + (value != null ? value.getClass() : "") + ")" +
                 ", nextValue=" + nextValue +
                 '}';

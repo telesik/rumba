@@ -7,7 +7,9 @@
  * @Project: Cortege
  */
 
-package com.rumba.cortege;
+package com.rumba.cortege.examples;
+
+import com.rumba.cortege.*;
 
 /**
  * Test
@@ -20,7 +22,7 @@ public class ExampleCollections {
         // Создание экземпляра CortegeHashSet
         CortegeSet<Cortege<Long, Cortege<String, Cortege.End>>> cortegeHashSetLS = Corteges.newCortegeHashSet(2);
         for (long i = 0; i < 5; i++) {
-            Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeQueue.create(2);
+            Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeChain.create(2);
             cortegeLS.setValue(i).setValue("" + i);
             cortegeHashSetLS.add(cortegeLS);
         }
@@ -28,9 +30,9 @@ public class ExampleCollections {
             System.out.println(cortege);
         }
 
-        cortegeHashSetLS.add(CortegeQueue.<Long, Cortege<String, Cortege.End>>create(2));
+        cortegeHashSetLS.add(CortegeChain.<Long, Cortege<String, Cortege.End>>create(2));
 
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeIS = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeIS = CortegeChain.create(2);
 
         System.out.println(cortegeHashSetLS.contains(cortegeIS));
         cortegeIS.setValue(null).setValue("3");
@@ -39,10 +41,10 @@ public class ExampleCollections {
 
         System.out.println(cortegeHashSetLS.contains(1, 3L));
 
-        Cortege<Long, Cortege<Long, Cortege<String, Cortege.End>>> cortegeLLS1 = CortegeQueue.create(3);
-        Cortege<Long, Cortege<Long, Cortege<String, Cortege.End>>> cortegeLLS2 = CortegeQueue.create(3);
-        Cortege<Long, Cortege<Long, Cortege<String, Cortege.End>>> cortegeLLS3 = CortegeQueue.create(3);
-        CortegeQueue<String, CortegeQueue<Long, CortegeQueue<String, Cortege.End>>> cortegeSLS = CortegeQueue.create(3);
+        Cortege<Long, Cortege<Long, Cortege<String, Cortege.End>>> cortegeLLS1 = CortegeChain.create(3);
+        Cortege<Long, Cortege<Long, Cortege<String, Cortege.End>>> cortegeLLS2 = CortegeChain.create(3);
+        Cortege<Long, Cortege<Long, Cortege<String, Cortege.End>>> cortegeLLS3 = CortegeChain.create(3);
+        CortegeChain<String, CortegeChain<Long, CortegeChain<String, Cortege.End>>> cortegeSLS = CortegeChain.create(3);
 
         cortegeLLS1.setValue(1L);
         cortegeLLS1.nextElement().setValue(11L);

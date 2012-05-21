@@ -18,7 +18,7 @@ public class CortegeLinkedListTest extends TestCase {
     @Test
     public void testAdd() throws Exception {
         CortegeLinkedList<Cortege<Long, Cortege<String, Cortege.End>>> cortegeLinkedList = Corteges.newCortegeLinkedList(2);
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeChain.create(2);
         cortegeLinkedList.add(cortegeLS);
         cortegeLinkedList.add(cortegeLS);
         cortegeLinkedList.add(cortegeLS);
@@ -31,11 +31,11 @@ public class CortegeLinkedListTest extends TestCase {
     @Test
     public void testAddEqualObjects() throws Exception {
         CortegeLinkedList<Cortege<Long, Cortege<String, Cortege.End>>> cortegeLinkedList = Corteges.newCortegeLinkedList(2);
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS1 = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS1 = CortegeChain.create(2);
         cortegeLinkedList.add(cortegeLS1);
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS2 = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS2 = CortegeChain.create(2);
         cortegeLinkedList.add(cortegeLS2);
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS3 = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS3 = CortegeChain.create(2);
         cortegeLinkedList.add(cortegeLS3);
         Assert.assertEquals(cortegeLinkedList.size(), 3);
         for (Cortege<Long, Cortege<String, Cortege.End>> cortege : cortegeLinkedList) {

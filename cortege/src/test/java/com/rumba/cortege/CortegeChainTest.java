@@ -14,7 +14,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class CortegeQueueTest extends TestCase {
+public class CortegeChainTest extends TestCase {
 
     @BeforeMethod
     public void before() {
@@ -23,7 +23,7 @@ public class CortegeQueueTest extends TestCase {
     @Test(expectedExceptions = IllegalArgumentException.class) // TODO: didn't catch exception :(
     public void testCreateWrongSize() throws Exception {
         try {
-            Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeQueue.create(0);
+            Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeChain.create(0);
         } catch (IllegalArgumentException e) {
             return;
         }
@@ -32,12 +32,12 @@ public class CortegeQueueTest extends TestCase {
 
     @Test
     public void testCreate() throws Exception {
-        Cortege<Long, Cortege<String, Cortege.End>> cortege = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortege = CortegeChain.create(2);
     }
 
     @Test
     public void testSetGetValue() throws Exception {
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeChain.create(2);
         cortegeLS.setValue(null);
         Assert.assertNull(cortegeLS.getValue());
         cortegeLS.setValue(4L);
@@ -61,7 +61,7 @@ public class CortegeQueueTest extends TestCase {
 
     @Test(expectedExceptions = IllegalStateException.class) // TODO: didn't catch exception :(
     public void testGetValueException() throws Exception {
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeChain.create(2);
         try {
             Object value = cortegeLS.getValue(3);
             cortegeLS.nextElement().nextElement();
@@ -73,8 +73,8 @@ public class CortegeQueueTest extends TestCase {
 
     @Test
     public void testEquals() throws Exception {
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS1 = CortegeQueue.create(2);
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS2 = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS1 = CortegeChain.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS2 = CortegeChain.create(2);
         Assert.assertEquals(cortegeLS1, cortegeLS2);
         cortegeLS2.setValue(1L);
         Assert.assertNotEquals(cortegeLS1, cortegeLS2);
@@ -92,7 +92,7 @@ public class CortegeQueueTest extends TestCase {
 
     @Test
     public void testHashCode() throws Exception {
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS = CortegeChain.create(2);
         int hashOfEmptyCortege = cortegeLS.hashCode();
         cortegeLS.setValue(1L);
         int hashOfCortege1 = cortegeLS.hashCode();
@@ -102,8 +102,8 @@ public class CortegeQueueTest extends TestCase {
 
     @Test
     public void testToString() throws Exception {
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS1 = CortegeQueue.create(2);
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS2 = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS1 = CortegeChain.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS2 = CortegeChain.create(2);
         Assert.assertEquals(cortegeLS1.toString(), cortegeLS2.toString());
         cortegeLS2.setValue(1L);
         Assert.assertNotEquals(cortegeLS1.toString(), cortegeLS2.toString());
@@ -121,7 +121,7 @@ public class CortegeQueueTest extends TestCase {
 
     @Test
     public void testGetDeep() throws Exception {
-        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS1 = CortegeQueue.create(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS1 = CortegeChain.create(2);
         Assert.assertEquals(cortegeLS1.getDeep(), 2);
         Assert.assertEquals(cortegeLS1.nextElement().getDeep(), 1);
     }
