@@ -77,6 +77,36 @@ public class ExampleCollections {
             System.out.println(cortege);
         }
 
-//        Collection<Cortege> corteges = cortegeSetLLS.extract(2, "111");
+        CortegeLinkedList<Cortege<Long, Cortege<Long, Cortege<String, Cortege.End>>>> cortegeListLLS = Corteges.newCortegeLinkedList(cortegeLLS1.getDeep());
+        for (long i = 0; i < 10; i++) {
+            Cortege<Long, Cortege<Long, Cortege<String, Cortege.End>>> cortegeLLS = CortegeChain.create(3);
+            cortegeLLS.setValue(i).setValue(i * 10).setValue("" + i);
+            cortegeListLLS.add(cortegeLLS);
+        }
+        // find any first
+        Cortege<Long, Cortege<Long, Cortege<String, Cortege.End>>> any5 = cortegeListLLS.findAny(1, 5L);
+        System.out.println("any5 = " + any5);
+
+        // extract all rows with first element equal 2L
+        CortegeList<Cortege<Long, Cortege<Long, Cortege<String, Cortege.End>>>> extractAll5 = cortegeListLLS.extract(1, 2L);
+
+        System.out.println("extract all rows with first element equal 2L");
+        for (Cortege<Long, Cortege<Long, Cortege<String, Cortege.End>>> cortege : extractAll5) {
+            System.out.println(cortege);
+        }
+
+        System.out.println("extract all rows that are filtered by predicate");
+        CortegeList<Cortege<Long, Cortege<Long, Cortege<String, Cortege.End>>>> extractedByPredicate =
+                cortegeListLLS.extract(new Corteges.Predicate() {
+                    @Override
+                    public boolean apply(Cortege cortege) {
+                        long value = ((Long) (cortege.getValue())).longValue();
+                        return value > 5 && value < 9;
+                    }
+                });
+        System.out.println("extract all rows with first element grater then 5L");
+        for (Cortege<Long, Cortege<Long, Cortege<String, Cortege.End>>> cortege : extractedByPredicate) {
+            System.out.println(cortege);
+        }
     }
 }
