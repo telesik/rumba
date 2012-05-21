@@ -24,7 +24,7 @@ public class ExampleCortege {
         cortegeLS.nextElement().setValue("str");
         // 2-й вариант (заполняем подряд цепью, с контролем типа)
         cortegeLS.setValue(4L).setValue("str");
-        // 3-й вариант (заполняем массивом, с без контроля типа)
+        // 3-й вариант (заполняем массивом, без контроля типа)
         cortegeLS.setValues(4L, "str");
 
         // 1-й вариант (чтение первого элемента в кортеже, с контролем типа)
