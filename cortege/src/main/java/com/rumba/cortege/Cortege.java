@@ -15,15 +15,21 @@ package com.rumba.cortege;
  * @author alexeyk (voilesik@gmail.com)
  */
 public interface Cortege<V, T extends Cortege> {
+    AbstractCortege.ValueHolder getValueHolder();
+
+    AbstractCortege.ValueHolder getValueHolder(int num);
+
     T setValue(V value);
 
     T nextElement();
 
-    <Vi> Vi getValue(int index) throws ClassCastException; // be careful with types. Type is not bounded
+    <Vi> Vi getValue(int num) throws ClassCastException; // be careful with types. Type is not bounded
 
     int getDeep();
 
-    <Vi> void setValue(int index, Vi value); // be careful with types. Type is not bounded
+    <Vi> void setValue(int num, Vi value); // be careful with types. Type is not bounded
+
+    Object[] getValues();
 
     Cortege<V, T> setValues(Object... values); // be careful with types. Type is not bounded!!!
 

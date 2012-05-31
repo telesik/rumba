@@ -9,7 +9,6 @@
 
 package com.rumba.cortege;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,7 +21,5 @@ public final class CortegeCollections {
         for (T row : rows) {
             row.setValue(num, value);
         }
-        List<Object> column = columns[num - 1];
-        Collections.fill(column, value);
     }
 }

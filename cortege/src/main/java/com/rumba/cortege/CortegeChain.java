@@ -14,33 +14,44 @@ package com.rumba.cortege;
  *
  * @author alexeyk (voilesik@gmail.com)
  */
-public class CortegeChain<V, T extends Cortege> implements Cortege<V, T> {
-    private V value;
+public class CortegeChain<V, T extends Cortege> extends AbstractCortege<V, T> {
+
     private Cortege nextValue;
-    private int deep;
 
     private CortegeChain() {
     }
 
     @Override
     public T setValue(V value) {
-        this.value = value;
+        this.valueHolder.setValue(value);
         return (T) this.nextValue;
     }
 
     @Override
-    public <Vi> void setValue(int deep, Vi value) {
-        if (deep < 1) throw new IllegalArgumentException("deep should be a positive integer");
+    public <Vi> void setValue(int num, Vi value) {
+        if (num < 1 || num > deep) throw new IllegalArgumentException("num should be between 1 and " + deep);
         Cortege next = this;
-        for (int i = 1; i < deep; i++) {
+        for (int i = 1; i < num; i++) {
             next = next.nextElement();
         }
         next.setValue(value);
+    }
 
+    @Override
+    public Object[] getValues() {
+        Object[] values = new Object[deep];
+        Cortege base = this;
+        values[0] = base.getValueHolder().getValue();
+        for (int i = 1; i < deep; i++) {
+            base = base.nextElement();
+            values[i] = base.getValueHolder().getValue();
+        }
+        return values;
     }
 
     @Override
     public Cortege<V, T> setValues(Object... values) {
+        if (values.length > deep) throw new IllegalArgumentException("count of values should not be greater then " + deep);
         Cortege next = this;
         for (Object value : values) {
             next = next.setValue(value);
@@ -50,7 +61,7 @@ public class CortegeChain<V, T extends Cortege> implements Cortege<V, T> {
 
     @Override
     public V getValue() {
-        return value;
+        return valueHolder.getValue();
     }
 
     public T nextElement() {
@@ -70,10 +81,10 @@ public class CortegeChain<V, T extends Cortege> implements Cortege<V, T> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <Vi> Vi getValue(int index) throws ClassCastException {
-        if (index < 1) throw new IllegalArgumentException("deep should be a positive integer");
+    public <Vi> Vi getValue(int num) throws ClassCastException {
+        if (num < 1) throw new IllegalArgumentException("deep should be a positive integer");
         Cortege next = this;
-        for (int i = 1; i < index; i++) {
+        for (int i = 1; i < num; i++) {
             next = next.nextElement();
         }
         return (Vi) next.getValue();
@@ -88,13 +99,13 @@ public class CortegeChain<V, T extends Cortege> implements Cortege<V, T> {
 
         if (deep != that.deep) return false;
         if (nextValue != null ? !nextValue.equals(that.nextValue) : that.nextValue != null) return false;
-        return !(value != null ? !value.equals(that.value) : that.value != null);
+        return valueHolder.equals(that.valueHolder);
 
     }
 
     @Override
     public int hashCode() {
-        int result = value != null ? value.hashCode() : 0;
+        int result = valueHolder.hashCode();
         result = 31 * result + (nextValue != null ? nextValue.hashCode() : 0);
         result = 31 * result + deep;
         return result;
@@ -103,12 +114,9 @@ public class CortegeChain<V, T extends Cortege> implements Cortege<V, T> {
     @Override
     public String toString() {
         return "CortegeChain{" +
-                "value=" + value + "(" + (value != null ? value.getClass() : "") + ")" +
+                "value=" + valueHolder.getValue() + "(" + valueHolder.getValueClass() + ")" +
                 ", nextValue=" + nextValue +
                 '}';
     }
 
-    public int getDeep() {
-        return deep;
-    }
 }

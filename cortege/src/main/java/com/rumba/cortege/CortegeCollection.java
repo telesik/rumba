@@ -10,6 +10,8 @@
 package com.rumba.cortege;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -31,4 +33,17 @@ public interface CortegeCollection<T extends Cortege> extends Collection<T>, Ite
     <Vi> List<Vi> getColumnCopy(int num);
 
     <Vi> void fill(int num, Vi value); // be careful with types. Type is not bounded
+
+    class LinkedHoldersList extends LinkedList<CortegeChain.ValueHolder> {
+        @Override
+        public int indexOf(Object o) {
+            int index = 0;
+            Iterator<CortegeChain.ValueHolder> iterator = iterator();
+            while (iterator.hasNext()){
+                CortegeChain.ValueHolder next = iterator.next();
+                if(next.same(o)) return index;
+            }
+            return -1;
+        }
+    }
 }

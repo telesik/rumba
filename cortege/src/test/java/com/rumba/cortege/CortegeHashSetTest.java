@@ -14,6 +14,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CortegeHashSetTest extends TestCase {
@@ -60,12 +61,43 @@ public class CortegeHashSetTest extends TestCase {
         for (X x : mySet) {
             System.out.println(x);
         }
-        mySet = new HashSet(mySet);
+        mySet = new HashSet<X>(mySet);
         mySet.remove(new X(3));
         System.out.println("---");
         for (X x : mySet) {
             System.out.println(x);
         }
+    }
+
+    @Test
+    public void testRowColumnModification() throws Exception {
+        CortegeHashSet<Cortege<Long, Cortege<String, Cortege.End>>> cortegeHashSet = Corteges.newCortegeHashSet(2);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS0 = CortegeChain.create(2);
+        cortegeLS0.setValue(1L).setValue("first");
+        cortegeHashSet.add(cortegeLS0);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS1 = CortegeChain.create(2);
+        cortegeLS1.setValue(2L).setValue("second");
+        cortegeHashSet.add(cortegeLS1);
+        Cortege<Long, Cortege<String, Cortege.End>> cortegeLS2 = CortegeChain.create(2);
+        cortegeLS2.setValue(3L).setValue("third");
+        cortegeHashSet.add(cortegeLS2);
+        for (Cortege<Long, Cortege<String, Cortege.End>> cortege : cortegeHashSet) {
+            System.out.println(cortege);
+        }
+        cortegeLS0.setValue(10L).setValue("new first");
+        cortegeLS1.setValue(20L);
+        cortegeLS2.setValue(30L);
+        List<Long> column1 = cortegeHashSet.getColumnCopy(1);
+        System.out.println(column1);
+        Assert.assertEquals(column1.get(0), cortegeLS0.getValue());
+        Assert.assertEquals(column1.get(1), cortegeLS1.getValue());
+        Assert.assertEquals(column1.get(2), cortegeLS2.getValue());
+        List<String> column2 = cortegeHashSet.getColumnCopy(2);
+        Assert.assertEquals(column2.get(0), cortegeLS0.getValue(2));
+        Assert.assertEquals(column2.get(1), cortegeLS1.getValue(2));
+        Assert.assertEquals(column2.get(2), cortegeLS2.getValue(2));
+
+        System.out.println(column2);
     }
 
     @Test

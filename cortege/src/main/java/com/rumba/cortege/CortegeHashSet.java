@@ -9,7 +9,10 @@
 
 package com.rumba.cortege;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Implementation of CortegeSet
@@ -19,13 +22,13 @@ import java.util.*;
 public class CortegeHashSet<T extends Cortege> extends HashSet<T> implements CortegeSet<T> {
 
     private List<T> rows;
-    private List<Object>[] columns;
+    private LinkedHoldersList[] columns;
 
     CortegeHashSet(int deep) {
         rows = new LinkedList<T>();
-        columns = new List[deep];
+        columns = new LinkedHoldersList[deep];
         for (int index = 0; index < deep; index++) {
-            columns[index] = new LinkedList<Object>();
+            columns[index] = new LinkedHoldersList();
         }
     }
 
@@ -35,19 +38,13 @@ public class CortegeHashSet<T extends Cortege> extends HashSet<T> implements Cor
     }
 
     @Override
-    public CortegeSet<T> extract(int num, Object key) {
-        CortegeSet<T> foundCorteges = Corteges.newCortegeHashSet(columns.length);
-        if (rows.isEmpty()) return foundCorteges;
-        List<Object> column = columns[num - 1];
-        int foundIndex = -1;
-        int baseIndex = -1;
-        do {
-            column = column.subList(foundIndex + 1, column.size());
-            foundIndex = column.indexOf(key);
-            if (foundIndex == -1) break;
-            foundCorteges.add(rows.get((baseIndex += foundIndex + 1)));
-        } while (true);
-        return foundCorteges;
+    public CortegeSet<T> extract(final int num, final Object key) {
+        return extract(new Corteges.Predicate<T>() {
+            @Override
+            public boolean apply(T cortege) {
+                return cortege.getValueHolder(num).same(key);
+            }
+        });
     }
 
     @Override
@@ -76,12 +73,18 @@ public class CortegeHashSet<T extends Cortege> extends HashSet<T> implements Cor
 
     @Override
     public <Vi> List<Vi> getColumnCopy(int num) {
-        return new LinkedList<Vi>((Collection<Vi>) columns[num - 1]);
+        LinkedList<Vi> columnCopy = new LinkedList<Vi>();
+        for (AbstractCortege.ValueHolder<Vi> valueHolder : columns[num - 1]) {
+            columnCopy.add(valueHolder.value);
+        }
+        return columnCopy;
     }
 
     @Override
     public <Vi> void fill(int num, Vi value) {
-        CortegeCollections.fill(num, value, rows, columns);
+        for (CortegeChain.ValueHolder valueHolder : columns[num - 1]) {
+            valueHolder.setValue(value);
+        }
     }
 
     @Override
@@ -90,8 +93,11 @@ public class CortegeHashSet<T extends Cortege> extends HashSet<T> implements Cor
         boolean isAdded = super.add(cortege);
         if (isAdded) {
             rows.add(cortege);
-            for (int columnId = 0; columnId < columns.length; columnId++) {
-                columns[columnId].add(cortege.getValue(columnId + 1));
+            Cortege base = cortege;
+            columns[0].add(base.getValueHolder());
+            for (int columnId = 1; columnId < columns.length; columnId++) {
+                base = base.nextElement();
+                columns[columnId].add(base.getValueHolder());
             }
         }
         return isAdded;
@@ -110,7 +116,7 @@ public class CortegeHashSet<T extends Cortege> extends HashSet<T> implements Cor
 
     private void remove(int index) {
         rows.remove(index);
-        for (List<Object> column : columns) {
+        for (LinkedHoldersList column : columns) {
             column.remove(index);
         }
     }
@@ -140,7 +146,7 @@ public class CortegeHashSet<T extends Cortege> extends HashSet<T> implements Cor
         };
     }
 
-    private T findFirstByColumn(Object key, List<Object> column) {
+    private T findFirstByColumn(Object key, LinkedHoldersList column) {
         int index = column.indexOf(key);
         return index == -1 ? null : rows.get(index);
     }
