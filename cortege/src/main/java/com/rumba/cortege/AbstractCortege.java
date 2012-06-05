@@ -9,12 +9,14 @@
 
 package com.rumba.cortege;
 
+import java.io.Serializable;
+
 /**
  * Abstract cortege
  *
  * @author alexeyk (voilesik@gmail.com)
  */
-abstract class AbstractCortege<V, T extends Cortege> implements Cortege<V, T> {
+abstract class AbstractCortege<V, T extends Cortege> implements Cortege<V, T>, Serializable {
     protected ValueHolder<V> valueHolder = new ValueHolder<V>(null);
     protected int deep;
 
@@ -35,7 +37,7 @@ abstract class AbstractCortege<V, T extends Cortege> implements Cortege<V, T> {
         return deep;
     }
 
-    protected static class ValueHolder<V> {
+    protected static class ValueHolder<V> implements Serializable {
         V value;
 
         ValueHolder(V value) {
